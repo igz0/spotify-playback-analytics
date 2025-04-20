@@ -310,6 +310,16 @@ export default function FileUpload({ dict }: { dict: Dictionary }) {
                 </span>
               ))}
             </p>
+            <p className="mt-4 text-center">
+              <a
+                href="https://github.com/igz0/spotify-playback-analytics"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-green-600 hover:underline"
+              >
+                View on GitHub
+              </a>
+            </p>
           </div>
         </div>
       </div>
