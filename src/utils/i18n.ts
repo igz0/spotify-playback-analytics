@@ -17,6 +17,7 @@ export const isValidLocale = (locale: string): locale is Locale => {
 };
 
 // 辞書を取得する関数
-export const getDictionary = async (locale: Locale = defaultLocale) => {
-  return dictionaries[locale]();
+export const getDictionary = async (locale: string = defaultLocale) => {
+  const validLocale = isValidLocale(locale) ? locale : defaultLocale;
+  return dictionaries[validLocale]();
 };

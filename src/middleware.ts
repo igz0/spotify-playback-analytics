@@ -31,29 +31,25 @@ export function middleware(request: NextRequest) {
   // ロケールが既にパスに含まれている場合は何もしない
   if (pathnameHasLocale) return;
   
-  // _nextや静的ファイルへのリクエストはスキップ
-  if (pathname.startsWith('/_next') || pathname.includes('/api/')) {
-    return;
-  }
-  
-  // 静的ファイル（画像、フォント、アイコンなど）へのリクエストはスキップ
-  if (/\.(jpg|jpeg|png|gif|svg|ico|css|js)$/.test(pathname)) {
-    return;
-  }
-  
   // ユーザーの優先ロケールを取得
   const locale = getLocale(request);
   
-  // ロケールをクッキーに保存
-  const response = NextResponse.next();
-  response.cookies.set('NEXT_LOCALE', locale);
+  // 新しいURLを作成し、パスの先頭にロケールを追加
+  request.nextUrl.pathname = `/${locale}${pathname}`;
   
-  return response;
+  // リダイレクト
+  return NextResponse.redirect(request.nextUrl);
 }
 
 export const config = {
   matcher: [
-    // すべてのパスにマッチするが、_nextや静的ファイルは除外
-    '/((?!_next|.*\\..*).*)',
+    /*
+     * 以下で始まるパス以外のすべてのリクエストパスにマッチ:
+     * - api (APIルート)
+     * - _next/static (静的ファイル)
+     * - _next/image (画像最適化ファイル)
+     * - favicon.ico, sitemap.xml, robots.txt (メタデータファイル)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };
