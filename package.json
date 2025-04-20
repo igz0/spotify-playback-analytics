@@ -1,5 +1,5 @@
 {
-  "name": "spotify-history-analyzer",
+  "name": "spotify-playback-analytics",
   "version": "0.1.0",
   "private": true,
   "scripts": {
