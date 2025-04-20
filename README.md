@@ -1,48 +1,47 @@
+# Spotify Playback Analytics
 
-# Spotify再生履歴分析
+A web application for analyzing and visualizing your Spotify playback history data.
 
-Spotifyの再生履歴データを分析・可視化するWebアプリケーションです。
+## Features
 
-## 機能
+- Loading and analyzing Spotify playback history data
+- Overview statistics including total tracks played, total listening time, unique artists, and unique tracks
+- Top artists and top tracks rankings
+- Monthly and hourly playback time graphs
+- Filtering by date range
 
-- Spotifyの再生履歴データの読み込みと解析
-- 総再生曲数、総再生時間、ユニークアーティスト数、ユニークトラック数などの概要統計
-- トップアーティストとトップトラックのランキング
-- 月別・時間帯別の再生時間グラフ
-- 日付範囲によるフィルタリング
+## Technology Stack
 
-## 技術スタック
+- [Next.js](https://nextjs.org/) - React framework (App Router)
+- [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Recharts](https://recharts.org/) - React-based charting library
+- [date-fns](https://date-fns.org/) - Date manipulation library
+- [Biome](https://biomejs.dev/) - Linter & formatter
 
-- [Next.js](https://nextjs.org/) - Reactフレームワーク（App Router）
-- [TypeScript](https://www.typescriptlang.org/) - 型安全なJavaScript
-- [Tailwind CSS](https://tailwindcss.com/) - ユーティリティファーストCSSフレームワーク
-- [Recharts](https://recharts.org/) - Reactベースのグラフライブラリ
-- [date-fns](https://date-fns.org/) - 日付操作ライブラリ
-- [Biome](https://biomejs.dev/) - リンター・フォーマッター
+## Setup Instructions
 
-## セットアップ方法
-
-1. リポジトリをクローンする
+1. Clone the repository
    ```bash
    git clone <repository-url>
    cd spotify-history-analyzer
    ```
 
-2. 依存関係をインストールする
+2. Install dependencies
    ```bash
    npm install
    ```
 
-3. 開発サーバーを起動する
+3. Start the development server
    ```bash
    npm run dev
    ```
 
-4. ブラウザで [http://localhost:3000](http://localhost:3000) にアクセスする
+4. Access the application in your browser at [http://localhost:3000](http://localhost:3000)
 
-## Spotifyの再生履歴データについて
+## About Spotify Playback History Data
 
-このアプリケーションは、Spotifyからダウンロードした拡張再生履歴データを使用します。データは以下の形式のJSONファイルである必要があります：
+This application uses extended playback history data downloaded from Spotify. The data should be in JSON format as follows:
 
 ```json
 [
@@ -50,40 +49,42 @@ Spotifyの再生履歴データを分析・可視化するWebアプリケーシ�
     "ts": "2020-01-01T12:00:00Z",
     "platform": "Android",
     "ms_played": 180000,
-    "master_metadata_track_name": "曲名",
-    "master_metadata_album_artist_name": "アーティスト名",
-    "master_metadata_album_album_name": "アルバム名",
+    "master_metadata_track_name": "Track Name",
+    "master_metadata_album_artist_name": "Artist Name",
+    "master_metadata_album_album_name": "Album Name",
     ...
   },
   ...
 ]
 ```
 
-## 使い方
+## How to Use
 
-1. Spotifyから拡張再生履歴データをダウンロードする
-   - [Spotify](https://spotify.com)にログインします
-   - [お客様のデータの管理](https://www.spotify.com/jp/account/privacy/)ページを開き、「長期ストリーミング履歴」のチェックを選択し、それ以外のチェックを外します
-   - 「データをリクエスト」ボタンをクリックします
-   - 30日以内にデータが記載されたメールが届きます
-   - メールの内容をもとに`my_spotify_data.zip`をダウンロードします
-2. アプリケーションを起動する
+1. Download your extended playback history data from Spotify
+   - Log in to [Spotify](https://spotify.com)
+   - Open the [Privacy Settings](https://www.spotify.com/account/privacy/) page
+   - Select "Extended streaming history" and deselect other options
+   - Click the "Request data" button
+   - You'll receive an email with your data within 30 days
+   - Download `my_spotify_data.zip` using the instructions in the email
+   
+2. Start the application
    ```bash
    npm run dev
    ```
 
-3. ブラウザで [http://localhost:3000](http://localhost:3000) にアクセスする
+3. Access the application in your browser at [http://localhost:3000](http://localhost:3000)
 
-4. ダウンロードしたZIPファイル（my_spotify_data.zip）をアップロードする
-   - ファイルはブラウザ上で処理され、サーバーにアップロードされません
-   - 処理が完了すると、自動的にダッシュボードページにリダイレクトされます
+4. Upload the downloaded ZIP file (my_spotify_data.zip)
+   - The file is processed in the browser and is not uploaded to any server
+   - Once processing is complete, you'll be automatically redirected to the dashboard page
 
-5. ダッシュボードでデータを分析する
-   - 日付範囲でフィルタリングできます
-   - トップアーティストやトップトラックを確認できます
-   - 月別・時間帯別の再生時間を確認できます
-   - プラットフォーム別使用状況を確認できます
+5. Analyze your data on the dashboard
+   - Filter by date range
+   - View your top artists and top tracks
+   - Check your monthly and hourly listening patterns
+   - See platform usage statistics
 
-## ライセンス
+## License
 
 MIT
