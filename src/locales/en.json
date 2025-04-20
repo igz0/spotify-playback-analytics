@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "title": "Spotify Playback Analytics",
+    "description": "An application to analyze and visualize your Spotify listening history"
+  },
+  "common": {
+    "loading": "Loading data...",
+    "error": "An error occurred",
+    "noData": "No data available",
+    "backToTop": "Back to home"
+  },
+  "fileUpload": {
+    "title": "Spotify Playback Analytics",
+    "description": "Analyze your complete Spotify listening history.\nView your most played tracks, artists, and listening patterns by time.",
+    "step1": {
+      "title": "Step 1: Request Your Spotify Data",
+      "login": "Log in to Spotify.",
+      "openPrivacy": "Open the 'Manage Your Data' page and select 'Extended streaming history' only, uncheck all other options.",
+      "requestData": "Click the 'Request Data' button.",
+      "receiveEmail": "You'll receive an email with your data within 30 days.",
+      "downloadZip": "Download my_spotify_data.zip using the instructions in the email."
+    },
+    "step2": {
+      "title": "Step 2: Upload Your Data",
+      "privacy": "All data is processed in your browser. No data is collected.",
+      "uploadButton": "Click or drag to upload my_spotify_data.zip",
+      "processing": "Processing data...",
+      "zipError": "Please upload a ZIP file."
+    },
+    "footer": {
+      "description": "This tool is designed to analyze extended streaming history data provided by Spotify.\nAll processing happens in your browser, and no data is sent to any server."
+    }
+  },
+  "dashboard": {
+    "title": "Spotify Playback Analytics",
+    "filter": {
+      "title": "Filters",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "limitSelect": "Ranking Display Count"
+    },
+    "summary": {
+      "title": "Summary Statistics",
+      "totalTracks": "Total Tracks Played",
+      "totalListeningTime": "Total Listening Time",
+      "uniqueArtists": "Unique Artists",
+      "uniqueTracks": "Unique Tracks"
+    },
+    "topArtists": {
+      "title": "Top Artists",
+      "rank": "Rank",
+      "artist": "Artist",
+      "playCount": "Play Count",
+      "playTime": "Play Time"
+    },
+    "topTracks": {
+      "title": "Top Tracks",
+      "rank": "Rank",
+      "track": "Track",
+      "artist": "Artist",
+      "playCount": "Play Count"
+    },
+    "monthlyChart": {
+      "title": "Monthly Listening Time",
+      "hours": "Hours",
+      "playTime": "Listening Time (hours)"
+    },
+    "hourlyChart": {
+      "title": "Listening Time by Hour",
+      "hours": "Hours",
+      "playTime": "Listening Time (hours)"
+    },
+    "footer": {
+      "dataRange": "Data Range",
+      "noData": "No data",
+      "totalTracks": "Total Tracks"
+    },
+    "deleteData": {
+      "button": "Delete Your Stored Information",
+      "deleting": "Deleting...",
+      "description": "This action will completely delete your Spotify listening history data stored in your browser.\nTo analyze your data again, you'll need to re-upload the ZIP file.",
+      "confirm": "Are you sure you want to delete your Spotify listening history data stored in your browser? This action cannot be undone.",
+      "success": "Data successfully deleted. Redirecting to home page.",
+      "error": "An error occurred while deleting data."
+    }
+  }
+}

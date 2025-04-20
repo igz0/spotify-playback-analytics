@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Spotify再生履歴分析",
-  description: "Spotifyの再生履歴データを分析・可視化するアプリケーション",
+  title: "Spotify Playback Analytics",
+  description: "An application to analyze and visualize your Spotify listening history",
 };
 
 export default function RootLayout({

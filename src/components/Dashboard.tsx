@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useSpotifyHistory } from '@/hooks/useSpotifyHistory';
 import { formatDuration } from '@/utils/dataAnalysis';
 import { format, parseISO } from 'date-fns';
-import { ja } from 'date-fns/locale';
+import { ja, enUS } from 'date-fns/locale';
 import { clearTrackHistory } from '@/utils/indexedDB';
+import type { Dictionary } from '@/types/dictionary';
 import {
   BarChart,
   Bar,
@@ -19,21 +20,27 @@ import {
 } from 'recharts';
 
 
-// 日付フォーマット関数
-const formatDate = (dateStr: string) => {
-  try {
-    return format(parseISO(dateStr), 'yyyy年MM月dd日', { locale: ja });
-  } catch (e) {
-    return dateStr;
-  }
-};
+export default function Dashboard({ dict }: { dict: Dictionary }) {
+  // 言語に基づいてロケールを選択
+  const locale = dict.metadata.title.includes('Spotify再生履歴分析') ? ja : enUS;
+  
+  // 日付フォーマット関数
+  const formatDate = (dateStr: string) => {
+    try {
+      return format(
+        parseISO(dateStr), 
+        locale === ja ? 'yyyy年MM月dd日' : 'MMM d, yyyy', 
+        { locale }
+      );
+    } catch (e) {
+      return dateStr;
+    }
+  };
 
-// 時間フォーマット関数
-const formatHour = (hour: string) => {
-  return `${hour}時`;
-};
-
-export default function Dashboard() {
+  // 時間フォーマット関数
+  const formatHour = (hour: string) => {
+    return locale === ja ? `${hour}時` : `${hour}h`;
+  };
   const router = useRouter();
   const [topItemsLimit, setTopItemsLimit] = useState(10);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -48,20 +55,20 @@ export default function Dashboard() {
   
   // データ削除ハンドラー
   const handleClearData = async () => {
-    if (window.confirm('ブラウザに保存されたSpotifyの再生履歴データを削除しますか？この操作は元に戻せません。')) {
+    if (window.confirm(dict.dashboard.deleteData.confirm)) {
       try {
         setIsDeleting(true);
         const success = await clearTrackHistory();
         if (success) {
-          alert('データが正常に削除されました。ホームページにリダイレクトします。');
+          alert(dict.dashboard.deleteData.success);
           router.push('/');
         } else {
-          alert('データの削除中にエラーが発生しました。');
+          alert(dict.dashboard.deleteData.error);
           setIsDeleting(false);
         }
       } catch (error) {
         console.error('データ削除中にエラーが発生しました:', error);
-        alert('データの削除中にエラーが発生しました。');
+        alert(dict.dashboard.deleteData.error);
         setIsDeleting(false);
       }
     }
@@ -90,7 +97,7 @@ export default function Dashboard() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto" />
-          <p className="mt-4 text-lg">データを読み込み中...</p>
+          <p className="mt-4 text-lg">{dict.common.loading}</p>
         </div>
       </div>
     );
@@ -100,7 +107,7 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center text-red-500">
-          <h2 className="text-2xl font-bold mb-4">エラーが発生しました</h2>
+          <h2 className="text-2xl font-bold mb-4">{dict.common.error}</h2>
           <p>{error}</p>
         </div>
       </div>
@@ -111,7 +118,7 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <p className="text-lg">データがありません</p>
+          <p className="text-lg">{dict.common.noData}</p>
         </div>
       </div>
     );
@@ -131,7 +138,11 @@ export default function Dashboard() {
   // 月別データの整形
   const formattedMonthlyData = listeningByMonth.map((item) => ({
     ...item,
-    date: format(parseISO(item.date), 'yyyy年MM月', { locale: ja }),
+    date: format(
+      parseISO(item.date), 
+      locale === ja ? 'yyyy年MM月' : 'MMM yyyy', 
+      { locale }
+    ),
     hours: Math.round(item.totalMs / 1000 / 60 / 60),
   }));
 
@@ -145,25 +156,25 @@ export default function Dashboard() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col items-center mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-center">Spotify再生履歴分析</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center">{dict.dashboard.title}</h1>
         <a 
-          href="/" 
+          href="/"
           className="text-green-600 hover:text-green-800 transition-colors duration-200"
         >
-          トップページに戻る
+          {dict.common.backToTop}
         </a>
       </div>
 
       {/* フィルターセクション */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">フィルター</h2>
+        <h2 className="text-xl font-semibold mb-4">{dict.dashboard.filter.title}</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label 
               htmlFor="start-date" 
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              開始日
+              {dict.dashboard.filter.startDate}
             </label>
             <input
               id="start-date"
@@ -178,7 +189,7 @@ export default function Dashboard() {
               htmlFor="end-date" 
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              終了日
+              {dict.dashboard.filter.endDate}
             </label>
             <input
               id="end-date"
@@ -193,7 +204,7 @@ export default function Dashboard() {
               htmlFor="limit-select" 
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              ランキング表示数
+              {dict.dashboard.filter.limitSelect}
             </label>
             <select
               id="limit-select"
@@ -212,22 +223,22 @@ export default function Dashboard() {
 
       {/* 概要統計 */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">概要統計</h2>
+        <h2 className="text-xl font-semibold mb-4">{dict.dashboard.summary.title}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-gray-50 p-4 rounded-md">
-            <p className="text-sm text-gray-500">総再生曲数</p>
-            <p className="text-2xl font-bold">{totalTracks.toLocaleString()}曲</p>
+            <p className="text-sm text-gray-500">{dict.dashboard.summary.totalTracks}</p>
+            <p className="text-2xl font-bold">{totalTracks.toLocaleString()}{locale === ja ? '曲' : ''}</p>
           </div>
           <div className="bg-gray-50 p-4 rounded-md">
-            <p className="text-sm text-gray-500">総再生時間</p>
+            <p className="text-sm text-gray-500">{dict.dashboard.summary.totalListeningTime}</p>
             <p className="text-2xl font-bold">{formatDuration(totalListeningTimeMs)}</p>
           </div>
           <div className="bg-gray-50 p-4 rounded-md">
-            <p className="text-sm text-gray-500">ユニークアーティスト数</p>
+            <p className="text-sm text-gray-500">{dict.dashboard.summary.uniqueArtists}</p>
             <p className="text-2xl font-bold">{uniqueArtists.toLocaleString()}</p>
           </div>
           <div className="bg-gray-50 p-4 rounded-md">
-            <p className="text-sm text-gray-500">ユニークトラック数</p>
+            <p className="text-sm text-gray-500">{dict.dashboard.summary.uniqueTracks}</p>
             <p className="text-2xl font-bold">{uniqueTracks.toLocaleString()}</p>
           </div>
         </div>
@@ -237,22 +248,22 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* トップアーティスト */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">トップアーティスト</h2>
+          <h2 className="text-xl font-semibold mb-4">{dict.dashboard.topArtists.title}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    順位
+                    {dict.dashboard.topArtists.rank}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    アーティスト
+                    {dict.dashboard.topArtists.artist}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    再生回数
+                    {dict.dashboard.topArtists.playCount}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    再生時間
+                    {dict.dashboard.topArtists.playTime}
                   </th>
                 </tr>
               </thead>
@@ -271,7 +282,7 @@ export default function Dashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">
-                        {artist.count.toLocaleString()}回
+                        {artist.count.toLocaleString()}{locale === ja ? '回' : ''}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -288,22 +299,22 @@ export default function Dashboard() {
 
         {/* トップトラック */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">トップトラック</h2>
+          <h2 className="text-xl font-semibold mb-4">{dict.dashboard.topTracks.title}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    順位
+                    {dict.dashboard.topTracks.rank}
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    トラック
+                    {dict.dashboard.topTracks.track}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    アーティスト
+                    {dict.dashboard.topTracks.artist}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    再生回数
+                    {dict.dashboard.topTracks.playCount}
                   </th>
                 </tr>
               </thead>
@@ -325,7 +336,7 @@ export default function Dashboard() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">
-                        {track.count.toLocaleString()}回
+                        {track.count.toLocaleString()}{locale === ja ? '回' : ''}
                       </div>
                     </td>
                   </tr>
@@ -338,7 +349,7 @@ export default function Dashboard() {
 
       {/* 月別再生時間 */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">月別再生時間</h2>
+        <h2 className="text-xl font-semibold mb-4">{dict.dashboard.monthlyChart.title}</h2>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -356,19 +367,22 @@ export default function Dashboard() {
               />
               <YAxis
                 label={{
-                  value: '時間',
+                  value: dict.dashboard.monthlyChart.hours,
                   angle: -90,
                   position: 'insideLeft',
                 }}
               />
               <Tooltip
-                formatter={(value: number) => [`${value}時間`, '再生時間']}
+                formatter={(value: number) => [
+                  `${value}${locale === ja ? '時間' : ' hours'}`, 
+                  dict.dashboard.monthlyChart.playTime
+                ]}
                 labelFormatter={(label) => `${label}`}
               />
               <Legend />
               <Bar
                 dataKey="hours"
-                name="再生時間（時間）"
+                name={dict.dashboard.monthlyChart.playTime}
                 fill="#1DB954"
                 radius={[4, 4, 0, 0]}
               />
@@ -379,7 +393,7 @@ export default function Dashboard() {
 
       {/* 時間帯別再生時間 */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">時間帯別再生時間</h2>
+        <h2 className="text-xl font-semibold mb-4">{dict.dashboard.hourlyChart.title}</h2>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -390,19 +404,22 @@ export default function Dashboard() {
               <XAxis dataKey="date" />
               <YAxis
                 label={{
-                  value: '時間',
+                  value: dict.dashboard.hourlyChart.hours,
                   angle: -90,
                   position: 'insideLeft',
                 }}
               />
               <Tooltip
-                formatter={(value: number) => [`${value}時間`, '再生時間']}
+                formatter={(value: number) => [
+                  `${value}${locale === ja ? '時間' : ' hours'}`, 
+                  dict.dashboard.hourlyChart.playTime
+                ]}
                 labelFormatter={(label) => `${label}`}
               />
               <Legend />
               <Bar
                 dataKey="hours"
-                name="再生時間（時間）"
+                name={dict.dashboard.hourlyChart.playTime}
                 fill="#1DB954"
                 radius={[4, 4, 0, 0]}
               />
@@ -415,20 +432,20 @@ export default function Dashboard() {
       {/* フッター */}
       <div className="text-center text-gray-500 text-sm mt-8">
         <p>
-          データ範囲: {trackHistory.length > 0
+          {dict.dashboard.footer.dataRange}: {trackHistory.length > 0
             ? (() => {
                 // 日付でソートして最古と最新の日付を取得
                 const sortedTracks = [...trackHistory].sort(
                   (a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime()
                 );
-                return `${formatDate(sortedTracks[0].ts)} 〜 ${formatDate(
+                return `${formatDate(sortedTracks[0].ts)} ${locale === ja ? '〜' : 'to'} ${formatDate(
                   sortedTracks[sortedTracks.length - 1].ts
                 )}`;
               })()
-            : 'データなし'}
+            : dict.dashboard.footer.noData}
         </p>
         <p className="mt-2">
-          総トラック数: {trackHistory.length.toLocaleString()}
+          {dict.dashboard.footer.totalTracks}: {trackHistory.length.toLocaleString()}
         </p>
       </div>
       
@@ -443,16 +460,19 @@ export default function Dashboard() {
           {isDeleting ? (
             <>
               <span className="inline-block animate-spin mr-2">⟳</span>
-              削除中...
+              {dict.dashboard.deleteData.deleting}
             </>
           ) : (
-            'あなたのブラウザ上に保存された情報を削除する'
+            dict.dashboard.deleteData.button
           )}
         </button>
         <p className="text-xs text-gray-500 mt-2">
-          この操作を行うと、あなたのブラウザに保存されたSpotifyの再生履歴データが完全に削除されます。
-          <br />
-          データを再度分析するには、ZIPファイルを再度アップロードする必要があります。
+          {dict.dashboard.deleteData.description.split('\n').map((line, index) => (
+            <span key={`delete-desc-${index}`}>
+              {line}
+              {index < dict.dashboard.deleteData.description.split('\n').length - 1 && <br />}
+            </span>
+          ))}
         </p>
       </div>
     </div>

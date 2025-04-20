@@ -1,0 +1,87 @@
+{
+  "metadata": {
+    "title": "Spotify再生履歴分析",
+    "description": "Spotifyの再生履歴データを分析・可視化するアプリケーション"
+  },
+  "common": {
+    "loading": "データを読み込み中...",
+    "error": "エラーが発生しました",
+    "noData": "データがありません",
+    "backToTop": "トップページに戻る"
+  },
+  "fileUpload": {
+    "title": "Spotify再生履歴分析",
+    "description": "Spotifyの全期間の再生履歴を分析します。\nあなたが最も聞いている曲やアーティスト、時間帯別の再生回数などを表示します。",
+    "step1": {
+      "title": "Step 1: Spotifyデータのリクエスト",
+      "login": "Spotifyにログインします。",
+      "openPrivacy": "お客様のデータの管理ページを開き「長期ストリーミング履歴」のチェックを選択し、それ以外のチェックを外します。",
+      "requestData": "「データをリクエスト」ボタンをクリックしてください。",
+      "receiveEmail": "30日以内にデータが記載されたメールが届きます。",
+      "downloadZip": "メールの内容をもとにmy_spotify_data.zipをダウンロードします。"
+    },
+    "step2": {
+      "title": "Step 2: データのアップロード",
+      "privacy": "すべてのデータはブラウザ上で処理されます。データは収集されません。",
+      "uploadButton": "クリックまたはドラッグしてmy_spotify_data.zipをアップロード",
+      "processing": "データを処理中...",
+      "zipError": "ZIPファイルをアップロードしてください。"
+    },
+    "footer": {
+      "description": "このツールは、Spotifyから提供される拡張再生履歴データを分析するためのものです。\nすべての処理はブラウザ上で行われ、データがサーバーに送信されることはありません。"
+    }
+  },
+  "dashboard": {
+    "title": "Spotify再生履歴分析",
+    "filter": {
+      "title": "フィルター",
+      "startDate": "開始日",
+      "endDate": "終了日",
+      "limitSelect": "ランキング表示数"
+    },
+    "summary": {
+      "title": "概要統計",
+      "totalTracks": "総再生曲数",
+      "totalListeningTime": "総再生時間",
+      "uniqueArtists": "ユニークアーティスト数",
+      "uniqueTracks": "ユニークトラック数"
+    },
+    "topArtists": {
+      "title": "トップアーティスト",
+      "rank": "順位",
+      "artist": "アーティスト",
+      "playCount": "再生回数",
+      "playTime": "再生時間"
+    },
+    "topTracks": {
+      "title": "トップトラック",
+      "rank": "順位",
+      "track": "トラック",
+      "artist": "アーティスト",
+      "playCount": "再生回数"
+    },
+    "monthlyChart": {
+      "title": "月別再生時間",
+      "hours": "時間",
+      "playTime": "再生時間（時間）"
+    },
+    "hourlyChart": {
+      "title": "時間帯別再生時間",
+      "hours": "時間",
+      "playTime": "再生時間（時間）"
+    },
+    "footer": {
+      "dataRange": "データ範囲",
+      "noData": "データなし",
+      "totalTracks": "総トラック数"
+    },
+    "deleteData": {
+      "button": "あなたのブラウザ上に保存された情報を削除する",
+      "deleting": "削除中...",
+      "description": "この操作を行うと、あなたのブラウザに保存されたSpotifyの再生履歴データが完全に削除されます。\nデータを再度分析するには、ZIPファイルを再度アップロードする必要があります。",
+      "confirm": "ブラウザに保存されたSpotifyの再生履歴データを削除しますか？この操作は元に戻せません。",
+      "success": "データが正常に削除されました。ホームページにリダイレクトします。",
+      "error": "データの削除中にエラーが発生しました。"
+    }
+  }
+}

@@ -4,9 +4,10 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import JSZip from 'jszip';
 import type { SpotifyHistoryEntry } from '@/types/spotify';
+import type { Dictionary } from '@/types/dictionary';
 import { saveTrackHistory } from '@/utils/indexedDB';
 
-export default function FileUpload() {
+export default function FileUpload({ dict }: { dict: Dictionary }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -166,17 +167,21 @@ export default function FileUpload() {
       <div className="w-full max-w-3xl">
         <div className="bg-white p-8 rounded-lg shadow-md">
           <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-            Spotify再生履歴分析
+            {dict.fileUpload.title}
           </h1>
 
           <p className="text-gray-600 mb-4">
-            Spotifyの全期間の再生履歴を分析します。<br />
-            あなたが最も聞いている曲やアーティスト、時間帯別の再生回数などを表示します。
+            {dict.fileUpload.description.split('\n').map((line, index) => (
+              <span key={`desc-${index}`}>
+                {line}
+                {index < dict.fileUpload.description.split('\n').length - 1 && <br />}
+              </span>
+            ))}
           </p>
           
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4 text-gray-700">
-              Step 1: Spotifyデータのリクエスト
+              {dict.fileUpload.step1.title}
             </h2>
             <ol className="list-decimal pl-5 space-y-2 text-gray-600">
               <li>
@@ -188,7 +193,7 @@ export default function FileUpload() {
                 >
                   Spotify
                 </a>
-                にログインします。
+                {' - '}{dict.fileUpload.step1.login}
               </li>
               <li>
                 <a
@@ -197,27 +202,32 @@ export default function FileUpload() {
                   rel="noopener noreferrer"
                   className="text-green-600 hover:underline"
                 >
-お客様のデータの管理
-                </a>ページを開き「長期ストリーミング履歴」のチェックを選択し、それ以外のチェックを外します。
+                  {dict.fileUpload.step1.openPrivacy.includes('お客様のデータの管理') 
+                    ? 'お客様のデータの管理' 
+                    : 'Manage Your Data'}
+                </a>
+                {dict.fileUpload.step1.openPrivacy.includes('ページを開き') 
+                  ? dict.fileUpload.step1.openPrivacy.split('ページを開き')[1] 
+                  : dict.fileUpload.step1.openPrivacy.replace('Open the \'Manage Your Data\' page', '')}
               </li>
               <li>
-                <strong>「データをリクエスト」</strong>ボタンをクリックしてください。
+                <strong>{dict.fileUpload.step1.requestData}</strong>
               </li>
               <li>
-                30日以内にデータが記載されたメールが届きます。
+                {dict.fileUpload.step1.receiveEmail}
               </li>
               <li>
-                メールの内容をもとに<strong>my_spotify_data.zip</strong>をダウンロードします。
+                {dict.fileUpload.step1.downloadZip}
               </li>
             </ol>
           </div>
 
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4 text-gray-700">
-              Step 2: データのアップロード
+              {dict.fileUpload.step2.title}
             </h2>
             <p className="text-gray-600 mb-4">
-              すべてのデータはブラウザ上で処理されます。データは収集されません。
+              {dict.fileUpload.step2.privacy}
             </p>
 
             <button
@@ -240,7 +250,7 @@ export default function FileUpload() {
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500" />
                   </div>
                   <p className="text-gray-600">
-                    データを処理中... {progress}%
+                    {dict.fileUpload.step2.processing} {progress}%
                   </p>
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
                     <div
@@ -275,7 +285,7 @@ export default function FileUpload() {
                       />
                     </svg>
                     <p className="text-lg text-gray-600">
-                      クリックまたはドラッグして<strong>my_spotify_data.zip</strong>をアップロード
+                      {dict.fileUpload.step2.uploadButton}
                     </p>
                   </div>
                 </>
@@ -284,15 +294,21 @@ export default function FileUpload() {
 
             {error && (
               <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
-                {error}
+                {error === 'ZIPファイルをアップロードしてください。' 
+                  ? dict.fileUpload.step2.zipError 
+                  : error}
               </div>
             )}
           </div>
 
           <div className="text-sm text-gray-500 mt-8">
             <p>
-              このツールは、Spotifyから提供される拡張再生履歴データを分析するためのものです。<br />
-              すべての処理はブラウザ上で行われ、データがサーバーに送信されることはありません。
+              {dict.fileUpload.footer.description.split('\n').map((line, index) => (
+                <span key={`footer-${index}`}>
+                  {line}
+                  {index < dict.fileUpload.footer.description.split('\n').length - 1 && <br />}
+                </span>
+              ))}
             </p>
           </div>
         </div>
