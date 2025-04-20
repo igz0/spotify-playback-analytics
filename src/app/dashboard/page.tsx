@@ -11,6 +11,8 @@ import { getClientDictionary } from '@/utils/i18n-client';
 import { getLocale } from '@/utils/i18n-client';
 import type { Locale } from '@/utils/i18n';
 import type { Dictionary } from '@/types/dictionary';
+import jaDict from '@/locales/ja.json';
+import enDict from '@/locales/en.json';
 import {
   BarChart,
   Bar,
@@ -25,11 +27,18 @@ import {
 export default function DashboardPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [dict, setDict] = useState<Dictionary | null>(null);
+  
+  // ロケールに基づいて初期辞書を設定
+  const currentLocale = getLocale();
+  const initialDict = currentLocale === 'ja' ? jaDict : enDict;
+  const isJapanese = currentLocale === 'ja';
+  const dateLocale = isJapanese ? ja : enUS;
+  
+  const [dict, setDict] = useState<Dictionary>(initialDict);
   const [topItemsLimit, setTopItemsLimit] = useState(10);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // 辞書データを読み込む
+  // バックグラウンドで辞書を読み込む（初期表示には影響しない）
   useEffect(() => {
     const loadDictionary = async () => {
       const dictionary = await getClientDictionary();
@@ -68,10 +77,6 @@ export default function DashboardPage() {
     setDateRange,
   } = useSpotifyHistory(topItemsLimit);
 
-  // ロケールを取得
-  const locale: Locale = getLocale();
-  const isJapanese = locale === 'ja';
-  const dateLocale = isJapanese ? ja : enUS;
   
   // 日付フォーマット関数
   const formatDate = (dateStr: string) => {
@@ -132,16 +137,6 @@ export default function DashboardPage() {
     setTopItemsLimit(Number(e.target.value));
   };
 
-  if (!dict) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto" />
-          <p className="mt-4 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   if (isLoading || isDataLoading) {
     return (

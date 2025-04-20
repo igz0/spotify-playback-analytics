@@ -7,15 +7,23 @@ import type { SpotifyHistoryEntry } from '@/types/spotify';
 import type { Dictionary } from '@/types/dictionary';
 import { saveTrackHistory } from '@/utils/indexedDB';
 import { getClientDictionary } from '@/utils/i18n-client';
+import jaDict from '@/locales/ja.json';
+import enDict from '@/locales/en.json';
+import { getLocale } from '@/utils/i18n-client';
 
 export default function Home() {
-  const [dict, setDict] = useState<Dictionary | null>(null);
+  // ロケールに基づいて初期辞書を設定
+  const locale = getLocale();
+  const initialDict = locale === 'ja' ? jaDict : enDict;
+  
+  const [dict, setDict] = useState<Dictionary>(initialDict);
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const router = useRouter();
 
+  // バックグラウンドで辞書を読み込む（初期表示には影響しない）
   useEffect(() => {
     const loadDictionary = async () => {
       const dictionary = await getClientDictionary();
@@ -172,16 +180,6 @@ export default function Home() {
     }
   }, []);
 
-  if (!dict) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto" />
-          <p className="mt-4 text-lg">Loading...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
