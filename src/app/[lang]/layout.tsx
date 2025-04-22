@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { locales } from "@/utils/i18n";
+import { locales, getDictionary } from "@/utils/i18n";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,10 +14,20 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Spotify Playback Analytics",
-  description: "An application to analyze and visualize your Spotify listening history",
-};
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ lang: string }> 
+}): Promise<Metadata> {
+  const { lang } = await params;
+  
+  const dict = await getDictionary(lang);
+  
+  return {
+    title: dict.metadata.title,
+    description: dict.metadata.description,
+  };
+}
 
 // 静的生成時にサポートする言語を指定
 export async function generateStaticParams() {
