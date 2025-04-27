@@ -263,7 +263,7 @@ export default function DashboardClient({ dict, lang }: DashboardClientProps) {
           </div>
           <div className="bg-gray-50 p-4 rounded-md">
             <p className="text-sm text-gray-500">{dict.dashboard.summary.totalListeningTime}</p>
-            <p className="text-2xl font-bold">{formatDuration(totalListeningTimeMs)}</p>
+            <p className="text-2xl font-bold">{formatDuration(totalListeningTimeMs, isJapanese)}</p>
           </div>
           <div className="bg-gray-50 p-4 rounded-md">
             <p className="text-sm text-gray-500">{dict.dashboard.summary.uniqueArtists}</p>
@@ -319,7 +319,7 @@ export default function DashboardClient({ dict, lang }: DashboardClientProps) {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">
-                        {formatDuration(artist.totalMs)}
+                        {formatDuration(artist.totalMs, isJapanese)}
                       </div>
                     </td>
                   </tr>
@@ -498,9 +498,8 @@ export default function DashboardClient({ dict, lang }: DashboardClientProps) {
           )}
         </button>
         <p className="text-xs text-gray-500 mt-2">
-          {/* biome-ignore lint/suspicious/noArrayIndexKey: テキスト行には一意のIDがないため、インデックスを使用 */}
           {dict.dashboard.deleteData.description.split('\n').map((line, index) => (
-            <span key={`delete-desc-${index}`}>
+            <span key={`delete-desc-${line}`}>
               {line}
               {index < dict.dashboard.deleteData.description.split('\n').length - 1 && <br />}
             </span>

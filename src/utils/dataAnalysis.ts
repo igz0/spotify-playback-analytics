@@ -184,23 +184,36 @@ export function aggregateData(
 /**
  * ミリ秒を人間が読みやすい形式に変換する関数
  * @param ms ミリ秒
- * @returns 人間が読みやすい形式の時間（例: "2時間30分"）
+ * @param isJapanese 日本語表示するかどうか（デフォルトはfalse）
+ * @returns 人間が読みやすい形式の時間（例: "2時間30分" または "2 days 3 hours"）
  */
-export function formatDuration(ms: number): string {
+export function formatDuration(ms: number, isJapanese = false): string {
   const seconds = Math.floor(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
 
+  if (isJapanese) {
+    if (days > 0) {
+      return `${days}日${hours % 24}時間`;
+    }
+    
+    if (hours > 0) {
+      return `${hours}時間${minutes % 60}分`;
+    }
+    
+    return `${minutes}分${seconds % 60}秒`;
+  }
+  
   if (days > 0) {
-    return `${days}日${hours % 24}時間`;
+    return `${days} day${days !== 1 ? 's' : ''} ${hours % 24} hour${(hours % 24) !== 1 ? 's' : ''}`;
   }
   
   if (hours > 0) {
-    return `${hours}時間${minutes % 60}分`;
+    return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes % 60} min${(minutes % 60) !== 1 ? 's' : ''}`;
   }
   
-  return `${minutes}分${seconds % 60}秒`;
+  return `${minutes} min${minutes !== 1 ? 's' : ''} ${seconds % 60} sec${(seconds % 60) !== 1 ? 's' : ''}`;
 }
 
 /**
