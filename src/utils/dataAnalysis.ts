@@ -139,26 +139,21 @@ export function aggregateData(
   // プラットフォーム別の集計（プラットフォーム名を簡略化）
   const platformMap = new Map<string, { count: number; totalMs: number }>();
   for (const playedTrack of trackHistory) {
-    // platformプロパティがundefinedの場合もあるため、必ずstring型に変換する
-    let platform = 'Unknown';
+    let platform = playedTrack.platform || 'Unknown';
     
-    if (playedTrack.platform) {
-      platform = playedTrack.platform;
-      
-      // プラットフォーム名を簡略化
-      if (platform.startsWith('iOS')) {
-        platform = platform.split(' ')[0]; // "iOS" のみを取得
-      } else if (platform.startsWith('OS X')) {
-        platform = 'macOS';
-      } else if (platform.includes('Android')) {
-        platform = 'Android';
-      } else if (platform.includes('Windows')) {
-        platform = 'Windows';
-      } else if (platform.includes('web_player')) {
-        platform = 'Web Player';
-      } else if (platform.includes('Partner')) {
-        platform = 'Partner Device';
-      }
+    // プラットフォーム名を簡略化
+    if (platform.startsWith('iOS')) {
+      platform = platform.split(' ')[0]; // "iOS" のみを取得
+    } else if (platform.startsWith('OS X')) {
+      platform = 'macOS';
+    } else if (platform.includes('Android')) {
+      platform = 'Android';
+    } else if (platform.includes('Windows')) {
+      platform = 'Windows';
+    } else if (platform.includes('web_player')) {
+      platform = 'Web Player';
+    } else if (platform.includes('Partner')) {
+      platform = 'Partner Device';
     }
     
     const platformStats = platformMap.get(platform) || { count: 0, totalMs: 0 };
