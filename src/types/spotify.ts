@@ -2,7 +2,7 @@
 export interface SpotifyHistoryEntry {
   ts: string; // タイムスタンプ（UTC、トラックの再生が停止した時間）
   username?: string; // Spotifyのユーザー名
-  platform: string; // 再生に使用されたプラットフォーム（AndroidやGoogle Chromecastなど）
+  platform?: string; // 再生に使用されたプラットフォーム（AndroidやGoogle Chromecastなど）
   ms_played: number; // 再生時間（ミリ秒）
   conn_country: string; // 再生された国のコード（例：SE - スウェーデン）
   ip_addr_decrypted?: string; // 再生時に記録されたIPアドレス
