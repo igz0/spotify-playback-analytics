@@ -7,28 +7,31 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "biome check ."
+  },
+  "engines": {
+    "node": ">=20.9.0"
   },
   "dependencies": {
-    "@formatjs/intl-localematcher": "^0.6.1",
-    "@next/third-parties": "^15.3.1",
-    "d3": "^7.9.0",
-    "date-fns": "^4.1.0",
-    "jszip": "^3.10.1",
-    "negotiator": "^1.0.0",
-    "next": "15.3.8",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "recharts": "^2.15.3"
+    "@formatjs/intl-localematcher": "0.8.13",
+    "@next/third-parties": "16.3.0",
+    "d3": "7.9.0",
+    "date-fns": "4.4.0",
+    "jszip": "3.10.1",
+    "negotiator": "1.0.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "recharts": "3.10.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@tailwindcss/postcss": "^4",
-    "@types/negotiator": "^0.6.3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@biomejs/biome": "2.5.7",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/negotiator": "0.6.4",
+    "@types/node": "26.2.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "tailwindcss": "4.3.3",
+    "typescript": "7.0.2"
   }
 }
