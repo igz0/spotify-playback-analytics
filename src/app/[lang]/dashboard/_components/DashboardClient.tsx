@@ -405,7 +405,7 @@ export default function DashboardClient({ dict, lang }: DashboardClientProps) {
                 }}
               />
               <Tooltip
-                formatter={(value: number) => [
+                formatter={(value) => [
                   `${value}${isJapanese ? '時間' : ' hours'}`, 
                   dict.dashboard.monthlyChart.playTime
                 ]}
@@ -442,7 +442,7 @@ export default function DashboardClient({ dict, lang }: DashboardClientProps) {
                 }}
               />
               <Tooltip
-                formatter={(value: number) => [
+                formatter={(value) => [
                   `${value}${isJapanese ? '時間' : ' hours'}`, 
                   dict.dashboard.hourlyChart.playTime
                 ]}
