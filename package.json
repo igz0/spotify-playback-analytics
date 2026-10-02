@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "0.8.13",
-    "@next/third-parties": "16.3.0",
+    "@next/third-parties": "16.3.8",
     "d3": "7.9.0",
     "date-fns": "4.4.0",
     "jszip": "3.10.1",
     "negotiator": "1.0.0",
-    "next": "16.3.0",
+    "next": "16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "recharts": "3.10.1"
